@@ -1,4 +1,4 @@
-package com.marcos.barbosa.bachapplication.model;
+package com.marcos.barbosa.bachapplication;
 
 public class Customer {
   private String firstName;

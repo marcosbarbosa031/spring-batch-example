@@ -1,9 +1,6 @@
-package com.marcos.barbosa.bachapplication.configuration;
+package com.marcos.barbosa.bachapplication;
 
 import javax.sql.DataSource;
-
-import com.marcos.barbosa.bachapplication.model.Customer;
-import com.marcos.barbosa.bachapplication.processor.PersonItemProcessor;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -35,7 +32,7 @@ public class BatchConfiguration {
   @Bean
   public FlatFileItemReader<Customer> reader() {
     return new FlatFileItemReaderBuilder<Customer>()
-      .name("personItemReader")
+      .name("CustomerItemReader")
       .resource(new ClassPathResource("example-data.csv"))
       .delimited()
       .names(new String[]{"firstName", "lastName", "balance"})
@@ -46,8 +43,8 @@ public class BatchConfiguration {
   }
 
   @Bean
-  public PersonItemProcessor processor() {
-    return new PersonItemProcessor();
+  public CustomerItemProcessor processor() {
+    return new CustomerItemProcessor();
   }
 
   @Bean

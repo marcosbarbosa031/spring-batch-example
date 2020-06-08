@@ -1,6 +1,4 @@
-package com.marcos.barbosa.bachapplication.configuration;
-
-import com.marcos.barbosa.bachapplication.model.Customer;
+package com.marcos.barbosa.bachapplication;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
