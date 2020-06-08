@@ -2,7 +2,7 @@ package com.marcos.barbosa.bachapplication.configuration;
 
 import javax.sql.DataSource;
 
-import com.marcos.barbosa.bachapplication.model.Person;
+import com.marcos.barbosa.bachapplication.model.Customer;
 import com.marcos.barbosa.bachapplication.processor.PersonItemProcessor;
 
 import org.springframework.batch.core.Job;
@@ -33,14 +33,14 @@ public class BatchConfiguration {
   public StepBuilderFactory stepBuilderFactory;
 
   @Bean
-  public FlatFileItemReader<Person> reader() {
-    return new FlatFileItemReaderBuilder<Person>()
+  public FlatFileItemReader<Customer> reader() {
+    return new FlatFileItemReaderBuilder<Customer>()
       .name("personItemReader")
       .resource(new ClassPathResource("example-data.csv"))
       .delimited()
-      .names(new String[]{"firstName", "lastName"})
-      .fieldSetMapper(new BeanWrapperFieldSetMapper<Person>() {{
-        setTargetType(Person.class);
+      .names(new String[]{"firstName", "lastName", "balance"})
+      .fieldSetMapper(new BeanWrapperFieldSetMapper<Customer>() {{
+        setTargetType(Customer.class);
       }})
       .build();
   }
@@ -51,10 +51,10 @@ public class BatchConfiguration {
   }
 
   @Bean
-  public JdbcBatchItemWriter<Person> writer(DataSource dataSource) {
-    return new JdbcBatchItemWriterBuilder<Person>()
+  public JdbcBatchItemWriter<Customer> writer(DataSource dataSource) {
+    return new JdbcBatchItemWriterBuilder<Customer>()
       .itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())
-      .sql("INSERT INTO PEOPLE (first_name, last_name) VALUES (:firstName, :lastName)")
+      .sql("INSERT INTO PEOPLE (first_name, last_name, balance) VALUES (:firstName, :lastName, :balance)")
       .dataSource(dataSource)
       .build();
   }
@@ -70,9 +70,9 @@ public class BatchConfiguration {
   }
 
   @Bean
-  public Step step1(JdbcBatchItemWriter<Person> writer) {
+  public Step step1(JdbcBatchItemWriter<Customer> writer) {
     return stepBuilderFactory.get("step1")
-    .<Person, Person> chunk(10)
+    .<Customer, Customer> chunk(10)
     .reader(reader())
     .processor(processor())
     .writer(writer)
